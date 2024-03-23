@@ -1,5 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
+const jwt = require("jsonwebtoken");
 
 const app = express.Router();
 const pool = require("../../database/pool");
@@ -32,6 +33,36 @@ app.post("/register", async (req, res) => {
     ]);
     console.log("Client created " + id);
     res.status(200).json({ msg: "client created" });
+  } catch (error) {
+    console.error("Error creating client:", error);
+    res.status(400).json({ msg: "Something went wrong" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { id, password } = req.body;
+  try {
+    //check if client exist
+    const clientDetails = await pool.query("SELECT * FROM CLIENT WHERE ID=$1", [
+      id,
+    ]);
+    if (clientDetails.rowCount == 0) {
+      res.status(400).json({ msg: "client doesn't exist" });
+      return;
+    }
+
+    //check if password matches
+    const details = clientDetails.rows[0];
+    if (password != details.password) {
+      res.status(400).json({ msg: "password is incorrect" });
+      return;
+    }
+
+    //Generate token
+    const secretKey = process.env.SECRET_KEY;
+    const token = jwt.sign({ id: details.id }, secretKey);
+    res.set("Authorization", `Bearer ${token}`);
+    res.status(200).json({});
   } catch (error) {
     console.error("Error creating client:", error);
     res.status(400).json({ msg: "Something went wrong" });
