@@ -7,11 +7,15 @@ dotenv.config();
 const app = express();
 
 const clientRouter = require("./routes/client");
+const hostRouter = require("./routes/host");
+
 const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(logger);
+
 app.use("/client", clientRouter);
+app.use("/host", hostRouter);
 
 app.get("/status", (req, res) => {
   res.status(200).json({ status: "alive" });
