@@ -69,4 +69,25 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/checkattendence", async (req, res) => {
+  try {
+    const { date, course, id } = req.body;
+    const results = await pool.query(
+      "SELECT * FROM attendence WHERE date = $1 AND cid = $2 AND course_id = $3",
+      [date, id, course]
+    );
+    console.log(results);
+    if (results.rowCount > 0) {
+      res.status(200).json({ msg: "client present" });
+      return;
+    } else {
+      res.status(400).json({ msg: "client absent" });
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: "something went wrong" });
+  }
+});
+
 module.exports = app;

@@ -70,4 +70,20 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/markattendance", async (req, res) => {
+  try {
+    const { courseId, date, student } = req.body;
+    console.log(student);
+    for (const { id, time } of student) {
+      const insertDataQuery =
+        "INSERT INTO ATTENDENCE (CID, COURSE_ID, DATE, TIME) VALUES ($1, $2, $3, $4)";
+      await pool.query(insertDataQuery, [id, courseId, date, time]);
+    }
+    res.status(200).json({ msg: "Attendance marked successfully." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error" });
+  }
+});
+
 module.exports = app;
