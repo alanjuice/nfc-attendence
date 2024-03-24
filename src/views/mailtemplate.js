@@ -34,7 +34,7 @@ const mailtemplate = (resetLink) => {
             <div class="container">
               <div class="email">
                 <h2 class="email-title">You have opted for resetting your password</h2>
-                <p class="reset-link"><a href="http://${resetLink}">Click to reset password</a></p>
+                <p class="reset-link"><a href="${resetLink}">Click to reset password</a></p>
               </div>
             </div>
           </body>
