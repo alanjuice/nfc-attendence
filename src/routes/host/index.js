@@ -63,7 +63,7 @@ app.post("/login", async (req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const token = jwt.sign({ id: details.id }, secretKey);
     res.set("Authorization", `Bearer ${token}`);
-    res.status(200).json({});
+    res.status(200).json({ msg: "logged in" });
   } catch (error) {
     console.error("Error :", error);
     res.status(400).json({ msg: "Something went wrong" });
