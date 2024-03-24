@@ -9,7 +9,7 @@ async function forgotpassword(req, res) {
     const queryText = `SELECT * FROM ${type} WHERE id = $1`;
     const user = await pool.query(queryText, [id]);
     if (user.rowCount == 0) {
-      res.status(200).json({ msg: "user doesn't exist" });
+      res.status(400).json({ msg: "user doesn't exist" });
       return;
     }
     const userDetails = user.rows[0];

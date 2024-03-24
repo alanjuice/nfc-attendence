@@ -20,7 +20,6 @@ app.post("/register", async (req, res) => {
   const { name, id, email, password } = req.body;
   try {
     const idUsed = await pool.query("SELECT * FROM CLIENT WHERE ID=$1", [id]);
-    console.log(idUsed);
     if (idUsed.rowCount > 0) {
       res.status(400).json({ msg: "id already exists" });
       return;
