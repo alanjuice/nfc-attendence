@@ -89,4 +89,20 @@ app.post("/checkattendence", async (req, res) => {
   }
 });
 
+app.post("/viewattendance", async (req, res) => {
+  const { date, id } = req.body;
+
+  try {
+    const result = await pool.query(
+      "SELECT course_id FROM attendence WHERE cid = $1 AND date = $2",
+      [id, date]
+    );
+    const courses = result.rows.map((row) => row.course_id);
+    res.status(200).json({ courses: courses });
+  } catch (error) {
+    console.error("Error retrieving attendance:", error);
+    res.status(500).send({ msg: "Error retrieving attendance" });
+  }
+});
+
 module.exports = app;
